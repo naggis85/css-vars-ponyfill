@@ -1036,7 +1036,13 @@ var regex = {
     }
     if (document.readyState !== "loading") {
         var hasNativeSupport = window.CSS && window.CSS.supports && window.CSS.supports("(--a: 0)");
-        if (!hasNativeSupport || !settings.onlyLegacy) {
+        var bwAgent = window.navigator.userAgent;
+        var isEdge = bwAgent.indexOf("Edge/");
+        var checkEdgeVersion = "";
+        if (isEdge > -1) {
+            checkEdgeVersion = bwAgent.substr(isEdge + 5, 2);
+        }
+        if (!hasNativeSupport || !settings.onlyLegacy || checkEdgeVersion < 17) {
             var styleNodeId = name;
             getCssData({
                 include: settings.include,

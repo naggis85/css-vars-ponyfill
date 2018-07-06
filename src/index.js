@@ -155,9 +155,13 @@ function cssVars(options = {}) {
     // Verify readyState to ensure all <link> and <style> nodes are available
     if (document.readyState !== 'loading') {
         const hasNativeSupport = window.CSS && window.CSS.supports && window.CSS.supports('(--a: 0)');
-
-        // Lacks native support or onlyLegacy 'false'
-        if (!hasNativeSupport || !settings.onlyLegacy) {
+        const bwAgent = window.navigator.userAgent;
+        const isEdge = bwAgent.indexOf('Edge/');
+        let checkEdgeVersion = '';
+        if (isEdge > -1) {
+            checkEdgeVersion = bwAgent.substr(isEdge + 5, 2);
+        }
+        if (!hasNativeSupport || !settings.onlyLegacy || checkEdgeVersion < 17) {
             const styleNodeId = pkgName;
 
             getCssData({

@@ -44,27 +44,21 @@
             parser.setAttribute("href", url);
             parser.href = parser.href;
             var isCrossDomain = parser.host !== location.host;
-            var isSameProtocol = parser.protocol === location.protocol;
             if (isCrossDomain && typeof XDomainRequest !== "undefined") {
-                if (isSameProtocol) {
-                    var xdr = new XDomainRequest();
-                    xdr.open("GET", url);
-                    xdr.timeout = 0;
-                    xdr.onprogress = Function.prototype;
-                    xdr.ontimeout = Function.prototype;
-                    xdr.onload = function() {
-                        onSuccess(xdr.responseText, i);
-                    };
-                    xdr.onerror = function(err) {
-                        onError(xdr, i);
-                    };
-                    setTimeout(function() {
-                        xdr.send();
-                    }, 0);
-                } else {
-                    console.log("Internet Explorer 9 Cross-Origin (CORS) requests must use the same protocol");
-                    onError(null, i);
-                }
+                var xdr = new XDomainRequest();
+                xdr.open("GET", url);
+                xdr.timeout = 0;
+                xdr.onprogress = Function.prototype;
+                xdr.ontimeout = Function.prototype;
+                xdr.onload = function() {
+                    onSuccess(xdr.responseText, i);
+                };
+                xdr.onerror = function(err) {
+                    onError(xdr, i);
+                };
+                setTimeout(function() {
+                    xdr.send();
+                }, 0);
             } else {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", url);
